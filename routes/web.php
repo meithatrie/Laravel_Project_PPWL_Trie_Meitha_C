@@ -4,21 +4,27 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-// User (halaman utama)
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+// Halaman utama (user / landing page)
 Route::get('/', function () {
     return view('user.home');
 })->name('home');
 
-// Admin Dashboard
+// Dashboard Admin (hanya bisa diakses setelah login)
 Route::get('/dashboard', function () {
     return view('admin.dashboard');
-})->middleware(['auth', 'admin'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
-// Produk (CRUD - Admin)
+// CRUD Produk (Admin)
 Route::resource('products', ProductController::class)
-    ->middleware(['auth', 'admin']);
+    ->middleware(['auth']);
 
-// Profile (Breeze)
+// Profile (Laravel Breeze)
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
